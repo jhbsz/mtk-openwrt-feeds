@@ -20,7 +20,7 @@ define Package/uci2dat
   SECTION:=MTK Properties
   CATEGORY:=MTK Properties
   DEPENDS:=+libuci
-  TITLE:=Translate uci config into ralink wifi dat format
+  TITLE:=Translate uci config into MTK/Ralink WiFi profile
   SUBMENU:=Applications
 endef
 
