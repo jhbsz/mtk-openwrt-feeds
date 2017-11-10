@@ -12,11 +12,6 @@ PKG_MAINTAINER:=Hua Shao <nossiac@163.com>
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/kernel.mk
 
-HTDOCS = /www
-LUA_LIBRARYDIR = /usr/lib/lua
-LUCI_LIBRARYDIR = $(LUA_LIBRARYDIR)/luci
-
-
 define Package/mt7628
   CATEGORY:=MTK Properties
   SUBMENU:=Drivers

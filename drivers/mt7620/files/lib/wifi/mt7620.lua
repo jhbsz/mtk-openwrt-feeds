@@ -28,8 +28,8 @@ function add_vif_into_lan(vif)
         brvifs = brvifs.." "..vif
         os.execute("uci set network.lan.ifname=\""..brvifs.."\"")
         os.execute("uci commit")
-        os.execute("brctl addif br-lan "..vif)
-        -- os.execute("ubus call network.interface.lan add_device \"{\\\"name\\\":\\\""..vif.."\\\"}\"")
+        -- os.execute("brctl addif br-lan "..vif)
+        os.execute("ubus call network.interface.lan add_device \"{\\\"name\\\":\\\""..vif.."\\\"}\"")
     end
 end
 
