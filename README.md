@@ -1,5 +1,3 @@
-
-
 ## What is this?
 
 This repo was a **unofficial** MediaTek feeds for [OpenWrt](https://openwrt.org "OpenWrt") or [Lede](https://lede-project.org). This project is experimental, and technical support will be limited.
@@ -29,16 +27,16 @@ The following drivers are planned :
 
 * mt7620 (done)
 * mt7628 (done)
-* mt7610 (todo)
+* mt7610 (done)
 * mt7612 (todo)
 * mt7603 (todo)
 * mt7615 (todo)
 
-Currently I only build them with lastest stable branch of Lede.
+Currently I only build them with latest stable branch of lede.
 
 ### uci2dat
 
-An application that translates "/etc/config/wireless" into MTK's WiFi profiles (eg. mt7620.dat). You may use it as an adapter to make MTK's WiFi drivers work with standard LuCi's WiFi management.
+An application that translates "/etc/config/wireless" into MTK's WiFi profiles (e.g. mt7620.dat). You may use it as an adapter to make MTK's WiFi drivers work with standard LuCi's WiFi management.
 
 ### mtk-nvram
 
@@ -57,12 +55,10 @@ To use this, you should install LuCI first:
 	scripts/feeds update
 	scripts/feeds install luci
 
-Also we have a small tool called "web console" along with the plugin, it exposes root shell to the web interface, sometimes you may need it. 
+Also we have a small tool called "web console" along with the plugin, it exposes root shell to the web interface, and sometimes you may need it. 
 
 ## Technical support? 
 
 I do this in my spare time, so I cannot promise too much. Anyway, you are welcome to feedback any issues/bugs/suggestions/patches here. That would be helpful for MTK to improve what they are doing.
 
-
- 
 
