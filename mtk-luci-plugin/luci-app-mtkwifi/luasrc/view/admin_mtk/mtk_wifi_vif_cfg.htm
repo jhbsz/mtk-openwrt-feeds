@@ -55,6 +55,11 @@ local WscValue = mtkwifi.token_get(cfgs["WscConfMode"], vifidx, "0") or "0"
 
 <script type="text/javascript" src="<%=resource%>/cbi.js?v=git-17.250.41546-90ac861"></script>
 
+<div id="loading" style="margin-top: 1em; display: none;">
+<img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="vertical-align:e;" />
+    &nbsp;&nbsp;&nbsp; Please waiting while the page is loading......
+</div>
+
 <form method="post" name="cbi" action="<%=luci.dispatcher.build_url("admin", "mtk", "wifi", "vif_cfg", devname, vifname)%>" enctype="multipart/form-data" onsubmit="return validate_security(<%=vifidx%>,<%=cfgs["HT_DisallowTKIP"]%>)" autocomplete="off">
 <% if not dev or not vif then%>
   <fieldset class="cbi-section">
@@ -385,13 +390,26 @@ AA:BB:CC:DD:EE:FF
   </fieldset>
 
     <div class="cbi-page-actions">
-      <input class="cbi-button cbi-button-apply" name="__apply" value="Save and Apply" type="submit">
+        <input class="cbi-button cbi-button-apply" value="Reload" type="button" onclick='wifi_reload("<%=luci.dispatcher.build_url("admin", "mtk", "wifi", "reload", devname)%>");'>
       <input class="cbi-button cbi-button-apply" value="Save" type="submit">
       <input class="cbi-button cbi-button-reset" value="Reset" type="reset">
     </div>
 <% end %> <!-- if not dev -->
 </form>
 <script type="text/javascript">
+function wifi_reload(url) {
+    window.scrollTo(0, 0);
+    document.getElementById('loading').style.display="";
+    XHR.get(url, null,
+        function(x)
+        {
+            console.log(x);
+            document.getElementById("loading").style.display="none";
+            window.location.reload();
+        }
+    );
+}
+
 function AuthMode_onchange(to) {
     var enc_list = new Array()
     enc_list[0] = "OPEN";

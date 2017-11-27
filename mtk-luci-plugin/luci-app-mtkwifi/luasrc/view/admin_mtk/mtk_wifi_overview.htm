@@ -13,6 +13,11 @@ local devs = mtkwifi.get_all_devs()
 %>
     <h2><a name="content">Wireless Overview</a></h2>
 
+    <div id="loading" style="margin-top: 1em; display: none;">
+    <img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="vertical-align:e;" />
+        &nbsp;&nbsp;&nbsp; Please waiting while the page is loading......
+    </div>
+
     <% if #devs == 0 then %>
     <fieldset class="cbi-section">
         <legend>No wireless device found.</legend>
@@ -46,7 +51,7 @@ local devs = mtkwifi.get_all_devs()
                         <span> work mode: <% if dev.ApCliEnable == "1" then %> APCli <% else %> AP<% end %> <!--  <br> driver: <%=dev.version%> --></span>
                     </td>
                     <td style="width:310px;text-align:right">
-                        <input class="cbi-button cbi-button-reload" style="width:100px" title="Reload WiFi network" value="Reload" type="button" onclick="location.href='<%=luci.dispatcher.build_url("admin", "mtk", "wifi", "reload", dev.devname)%>'">
+                        <input class="cbi-button cbi-button-reload" style="width:100px" title="Reload WiFi network" value="Reload" type="button" onclick='wifi_reload("<%=luci.dispatcher.build_url("admin", "mtk", "wifi", "reload", dev.devname)%>");'>
                         <input class="cbi-button cbi-button-edit" style="width:100px" title="Configure WiFi device" value="Config" type="button" onclick="location.href='<%=luci.dispatcher.build_url("admin", "mtk", "wifi", "dev_cfg_view", dev.devname)%>'">
                         <input class="cbi-button cbi-button-add" style="width:100px" title="Add WiFi network" value="Add" type="button" onclick="location.href='<%=luci.dispatcher.build_url("admin", "mtk", "wifi", "vif_add_view", dev.devname,dev.vifs.__prefix)%>'">
                     </td>
@@ -111,11 +116,13 @@ local devs = mtkwifi.get_all_devs()
                         <% else %>
                         <input class="cbi-button cbi-button-apply" style="width:100px" title="Enable this network" value="Enable" type="button" onclick="location.href='<%=luci.dispatcher.build_url("admin", "mtk", "wifi", "vif_enable", dev.apcli.vifname)%>'">
                         <% end %>
+
                         <% if dev.apcli.status == "Connected" then %>
-                        <input class="cbi-button cbi-button-remove" style="width:100px" title="Reload WiFi network" value="Disconnect" type="button" onclick="location.href='<%=luci.dispatcher.build_url("admin", "mtk", "wifi", "apcli_disconnect", dev.devname, dev.apcli.vifname)%>'">
+                        <input class="cbi-button cbi-button-remove" style="width:100px" title="Reload WiFi network" value="Disconnect" type="button" onclick='wifi_reload("<%=luci.dispatcher.build_url("admin", "mtk", "wifi", "apcli_disconnect", dev.devname, dev.apcli.vifname)%>")'>
                         <% else %>
-                        <!-- <input class="cbi-button cbi-button-reload" style="width:100px" title="Reload WiFi network" value="Connect" type="button" onclick="location.href='<%=luci.dispatcher.build_url("admin", "mtk", "wifi", "apcli_connect", dev.devname, dev.apcli.vifname)%>'"> -->
+                        <!-- <input class="cbi-button cbi-button-reload" style="width:100px" title="Reload WiFi network" value="Connect" type="button" onclick='wifi_reload("<%=luci.dispatcher.build_url("admin", "mtk", "wifi", "apcli_connect", dev.devname,dev.apcli.vifname)%>")'> -->
                         <% end %>
+
                         <input class="cbi-button cbi-button-edit" style="width:100px" title="Configure WiFi device" value="Config" type="button" onclick="location.href='<%=luci.dispatcher.build_url("admin", "mtk", "wifi", "apcli_cfg_view", dev.devname, dev.apcli.vifname)%>'">
                     </td>
                 </tr>
@@ -150,3 +157,18 @@ local devs = mtkwifi.get_all_devs()
     </fieldset>
 -->
     <%+footer%>
+
+<script type="text/javascript">
+function wifi_reload(url) {
+    window.scrollTo(0, 0);
+    document.getElementById('loading').style.display="";
+    XHR.get(url, null,
+        function(x)
+        {
+            console.log(x);
+            document.getElementById("loading").style.display="none";
+            window.location.reload();
+        }
+    );
+}
+</script>

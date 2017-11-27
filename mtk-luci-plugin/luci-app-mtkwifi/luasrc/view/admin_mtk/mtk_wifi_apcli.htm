@@ -37,6 +37,11 @@ local debug = 0
 
 <script type="text/javascript" src="<%=resource%>/cbi.js?v=git-17.250.41546-90ac861"></script>
 
+<div id="loading" style="margin-top: 1em; display: none;">
+<img src="<%=resource%>/icons/loading.gif" alt="<%:Loading%>" style="vertical-align:e;" />
+    &nbsp;&nbsp;&nbsp; Please waiting while the page is loading......
+</div>
+
 <form method="post" name="cbi" action="<%=luci.dispatcher.build_url("admin", "mtk", "wifi", "apcli_cfg", devname, vifname)%>" enctype="multipart/form-data" onreset="return cbi_validate_reset(this)" onsubmit="return cbi_validate_form(this, 'Some fields are invalid, cannot save values!')" autocomplete="off">
 
     <fieldset class="cbi-section" id="vif-cfg-apcli">
@@ -168,15 +173,25 @@ local debug = 0
     </fieldset>
 
     <div class="cbi-page-actions" id="apcli_form_buttons">
-        <input class="cbi-button cbi-button-apply" name="__apply" value="Save and Apply" type="submit">
+        <input class="cbi-button cbi-button-apply" value="Reload" type="button" onclick='wifi_reload("<%=luci.dispatcher.build_url("admin", "mtk", "wifi", "reload", devname)%>");'>
         <input class="cbi-button cbi-button-apply" value="Save" type="submit">
         <input class="cbi-button cbi-button-reset" value="Reset" type="reset">
     </div>
 </form>
 
-
-
 <script type="text/javascript">
+    function wifi_reload(url) {
+        window.scrollTo(0, 0);
+        document.getElementById('loading').style.display="";
+        XHR.get(url, null,
+            function(x)
+            {
+                console.log(x);
+                document.getElementById("loading").style.display="none";
+                window.location.reload();
+            }
+        );
+    }
 
     var ap_list;
     function create_ap_table (aplist) {
