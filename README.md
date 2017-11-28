@@ -30,7 +30,7 @@ The following drivers are planned :
 * mt7610 (done)
 * mt7612 (todo)
 * mt7603 (todo)
-* mt7615 (todo)
+* mt7615 (done)
 
 Currently I only build them with latest stable branch of lede.
 
