@@ -41,7 +41,7 @@ function mt7610e_up(devname)
 	-- 7610 takes "rai" and "apclii" prefix.
 	-- for multi-bssid, we must bring up rai0 first. rai0 will create ra1, ra2,...
 	if not mtkwifi.exists("/sys/class/net/rai0") then
-		nixio.syslog("error", "unable to detect rai0, abort!")
+		nixio.syslog("err", "unable to detect rai0, abort!")
 		return
 	end
 	os.execute("ifconfig rai0 up")

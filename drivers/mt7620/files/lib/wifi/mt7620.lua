@@ -41,7 +41,7 @@ function mt7620_up(devname)
 	-- 7620 is always the 1st card and it takes "ra" and "apcli" prefix.
 	-- for multi-bssid, we must bring up ra0 first. ra0 will create ra1, ra2,...
 	if not mtkwifi.exists("/sys/class/net/ra0") then
-		nixio.syslog("error", "unable to detect ra0, abort!")
+		nixio.syslog("err", "unable to detect ra0, abort!")
 		return
 	end
 	os.execute("ifconfig ra0 up")
