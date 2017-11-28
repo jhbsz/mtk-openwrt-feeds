@@ -33,13 +33,13 @@ function add_vif_into_lan(vif)
     end
 end
 
-function mt7610e_up(devname)
+function mt7610_up(devname)
 	local nixio = require("nixio")
 	local mtkwifi = require("mtkwifi")
-	nixio.syslog("debug", "mt7610e_up called!")
+	nixio.syslog("debug", "mt7610_up called!")
 
-	-- 7610 takes "rai" and "apclii" prefix.
-	-- for multi-bssid, we must bring up rai0 first. rai0 will create ra1, ra2,...
+	-- 7610 is always the 2nd card and it takes "rai" and "apclii" prefix.
+	-- for multi-bssid, we must bring up rai0 first. rai0 will create rai1, rai2,...
 	if not mtkwifi.exists("/sys/class/net/rai0") then
 		nixio.syslog("err", "unable to detect rai0, abort!")
 		return
@@ -67,13 +67,13 @@ function mt7610e_up(devname)
 		end
 	end
 
-	os.execute(" rm -rf /tmp/mtk/wifi/mt7610e*.need_reload")
+	os.execute(" rm -rf /tmp/mtk/wifi/mt7610*.need_reload")
 end
 
-function mt7610e_down(devname)
+function mt7610_down(devname)
 	local nixio = require("nixio")
 	local mtkwifi = require("mtkwifi")
-	nixio.syslog("debug", "mt7610e_down called!")
+	nixio.syslog("debug", "mt7610_down called!")
 
 	for _,vif in mtkwifi.__spairs(string.split(mtkwifi.read_pipe("ls /sys/class/net"), "\n"))
 	do
@@ -98,44 +98,44 @@ function mt7610e_down(devname)
 		end
 	end
 
-	os.execute(" rm -rf /tmp/mtk/wifi/mt7610e*.need_reload")
+	os.execute(" rm -rf /tmp/mtk/wifi/mt7610*.need_reload")
 end
 
-function mt7610e_reload(devname)
+function mt7610_reload(devname)
 	local nixio = require("nixio")
-	nixio.syslog("debug", "mt7610e_reload called!")
-	mt7610e_down()
-	os.execute("rmmod mt7610e")
-	os.execute("modprobe mt7610e")
-	mt7610e_up()
+	nixio.syslog("debug", "mt7610_reload called!")
+	mt7610_down()
+	os.execute("rmmod mt7610")
+	os.execute("modprobe mt7610")
+	mt7610_up()
 end
 
-function mt7610e_reset(devname)
+function mt7610_reset(devname)
 	local nixio = require("nixio")
 	local mtkwifi = require("mtkwifi")
-	nixio.syslog("debug", "mt7610e_reset called!")
-	if mtkwifi.exists("/rom/etc/wireless/mt7610e/") then
-		os.execute("rm -rf /etc/wireless/mt7610e/")
-		os.execute("cp -rf /rom/etc/wireless/mt7610e/ /etc/wireless/")
-		mt7610e_reload()
+	nixio.syslog("debug", "mt7610_reset called!")
+	if mtkwifi.exists("/rom/etc/wireless/mt7610/") then
+		os.execute("rm -rf /etc/wireless/mt7610/")
+		os.execute("cp -rf /rom/etc/wireless/mt7610/ /etc/wireless/")
+		mt7610_reload()
 	else
 		nixio.syslog("debug", "/rom"..profile.." missing, unable to reset!")
 	end
 end
 
-function mt7610e_status(devname)
+function mt7610_status(devname)
 	return wifi_common_status()
 end
 
-function mt7610e_detect(devname)
+function mt7610_detect(devname)
 	local nixio = require("nixio")
 	local mtkwifi = require("mtkwifi")
-	nixio.syslog("debug", "mt7610e_detect called!")
+	nixio.syslog("debug", "mt7610_detect called!")
 
 	for _,dev in ipairs(mtkwifi.get_all_devs()) do
 		print([[
 config wifi-device ]]..dev.maindev.."\n"..[[
-	option type mt7610e
+	option type mt7610
 	option vendor ralink
 ]])
 		for _,vif in ipairs(dev.vifs) do
